@@ -62,7 +62,7 @@ The plugin is just the standard maven compiler plugin which executes the Javac a
       <target>1.8</target>
       <verbose>true</verbose>
       <annotationProcessors>
-        <annotationProcessor>mofokom.slee.SLEEAnnotationProcessor</annotationProcessor>
+        <annotationProcessor>mofokom.slee.SleeAnnotationProcessor</annotationProcessor>
       </annotationProcessors>
     </configuration>
   </plugin>
@@ -167,8 +167,8 @@ Then compile with the AspectJ plugin in your maven pom.
     <version>1.4</version>
     <configuration>
         <forceAjcCompile>true</forceAjcCompile>
-        <source>1.6</source>
-        <target>1.6</target>
+        <source>1.8</source>
+        <target>1.8</target>
         <showWeaveInfo>true</showWeaveInfo>
         <verbose>true</verbose>
         <aspectDirectory>target/generated-sources/annotations</aspectDirectory>
