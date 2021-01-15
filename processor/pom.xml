@@ -190,7 +190,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.6-SNAPSHOT</version>
+                <version>3.0.0-M1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -225,7 +225,7 @@
                                 <artifactItem>
                                     <groupId>org.mobicents.servers.jainslee.api</groupId>
                                     <artifactId>jain-slee-11-ext</artifactId>
-                                    <version>1.0.0-SNAPSHOT</version>
+                                    <version>7.1.83</version>
                                     <classifier>sources</classifier>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>

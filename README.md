@@ -8,77 +8,80 @@ Later I will show you how to use the AspectJ compiler to modify your compiled cl
 
 First step is to add the correct dependencies and plugins to your maven project and configure your container.
 
- 
-<dependency>
-    <groupId>javax.slee</groupId>
+ ````xml
+<dependencies>
+  <dependency>
+    <groupId>mobi.mofokom.slee</groupId>
     <artifactId>jain-slee-annotations</artifactId>
-    <version>1.0</version>
-</dependency>
-<dependency>
-    <groupId>mofokom</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </dependency>
+  <dependency>
+    <groupId>mobi.mofokom</groupId>
     <artifactId>slee-annotation-processor</artifactId>
-    <version>1.0</version>
-</dependency>
-
-...
-<repositories>
-  <repository>
-      <id>mofokom-public</id>
-      <name>mofokom-public</name>
-      <url>http://www.mofokom.mobi/maven/releases-public</url>
-  </repository>
-</repositories>
+    <version>1.0-SNAPSHOT</version>
+  </dependency>    
+</dependencies>
+````
 
 Then include the generated deployment descriptors to the projects target classes directory.
 
-<build>
+````xml
+  <build>
     <resources>
-        <resource>
-            <filtering>true</filtering>
-                <directory>${basedir}/target/generated-sources/annotations</directory>
-         </resource>
-    <resource>
+      <resource>
         <filtering>true</filtering>
-            <directory>${basedir}/src/main/resources</directory>
-    </resource>
-</resources>
+        <directory>${basedir}/target/generated-sources/annotations</directory>
+      </resource>
+      <resource>
+        <filtering>true</filtering>
+        <directory>${basedir}/src/main/resources</directory>
+      </resource>
+    </resources>
+  </build>
+````
 
 The plugin is just the standard maven compiler plugin which executes the Javac annotation processor. Note that this one uses the xalan xslt libraries to avoid problems with different versions of java and xml apis.
 
- 
-<plugin>
+````xml 
+<plugins>
+  <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-compiler-plugin</artifactId>
     <version>2.3.2</version>
     <executions>
-        <execution>
-            <id>generate</id>
-            <phase>generate-resources</phase>
-            <goals>
-                <goal>compile</goal> 
-            </goals>
-        </execution>
+      <execution>
+        <id>generate</id>
+        <phase>generate-resources</phase>
+        <goals>
+          <goal>compile</goal> 
+        </goals>
+      </execution>
     </executions>
     <configuration>
-        <source>1.6</source>
-        <target>1.6</target>
-        <verbose>true</verbose>
-        <annotationProcessors>
-            <annotationProcessor>mofokom.slee.SLEEAnnotationProcessor</annotationProcessor>
-        </annotationProcessors>
+      <source>1.8</source>
+      <target>1.8</target>
+      <verbose>true</verbose>
+      <annotationProcessors>
+        <annotationProcessor>mofokom.slee.SLEEAnnotationProcessor</annotationProcessor>
+      </annotationProcessors>
     </configuration>
-</plugin>
+  </plugin>
+</plugins>
+````
 
 Then we can get to coding with annotations for example to create a JAIN SLEE event type.
 
+````java
  @EventType(name=ExampleEvent.EVENT_TYPE_NAME,
  vendor=ExampleEvent.EVENT_TYPE_VENDOR,
  version=ExampleEvent.EVENT_TYPE_VERSION,
  libraryRefs={@LibraryRef(name="ExampleLibrary",vendor="ISV1",version="1.0"),   @LibraryRef(name="ExampleLibrary2",vendor="ISV1",version="1.0")}) 
  public class ExampleEvent {
+````
 
 And to have a sbb which will handle the event
 
+````java
  @Service(name = "CompleteExampleService", vendor = "ISV1", version = "1.0", rootSbb = CompleteExampleAnnotatedSbb.class)
  @Reentrant
  @Sbb(id = "mysbb", name = "CompleteExampleAnnotatedSbb", vendor = "ISV1", version = "1.0",
@@ -88,9 +91,11 @@ And to have a sbb which will handle the event
  @SbbRef(name = "SimpleExampleAnnotatedSbb", vendor = "ISV1", version = "1.0", alias = "SimpleSbb")},
  SecurityPermissions = Sbb.ALL_PERMISSIONS)
  public abstract class CompleteExampleAnnotatedSbb implements javax.slee.Sbb {
+````
 
 It could be handled by an initial event selector method.
 
+````java
  @InitialEventSelectorMethod({
  @EventTypeRef(name = ExampleEvent.EVENT_TYPE_NAME,
  vendor = ExampleEvent.EVENT_TYPE_VENDOR,
@@ -98,6 +103,7 @@ It could be handled by an initial event selector method.
  public InitialEventSelector ies(InitialEventSelector ies) {
     return ies;
  }
+````
 
 or a standard event handler method
 
