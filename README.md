@@ -107,20 +107,26 @@ It could be handled by an initial event selector method.
 
 or a standard event handler method
 
+````java
  @EventHandler(initialEvent = true, eventType =
  @EventTypeRef(name = ExampleEvent.EVENT_TYPE_NAME,
  vendor = ExampleEvent.EVENT_TYPE_VENDOR,
  version = ExampleEvent.EVENT_TYPE_VERSION)) 
  public void onExampleEvent(ExampleEvent event,
  ActivityContextInterface aci) {
+````
 
 Once you compile inspect the plugins output in
 
+````
  target/generated-sources/annotations/META-INF/event-jar.xml
+````
 
 and
 
+````
  target/generated-sources/annotations/META-INF/sbb-jar.xml
+````
 
 Notice how each element has an id as per xml spec. This is for container specific references or further processing.
 
@@ -134,11 +140,14 @@ opencloud - copy the aspectj-rt-1.7.jar into the RhinoSDK/lib/ext
 
 For example you can now inject some SLEE particles
 
+````java
  @Resource(name = "Sbb Tracer")
  private Tracer tracer;
+````
 
 Or inject other JNDI resources
 
+````java
  @Resource
  private SbbContext sbbContext;
  @Resource(name = "ExampleAnnotatedResourceAdaptor Entity Link")
@@ -147,10 +156,11 @@ Or inject other JNDI resources
  private ExampleActivityContextInterfaceFactory activityContextInterfaceFactory;
  @Resource
  private InitialContext context;
+````
 
 Then compile with the AspectJ plugin in your maven pom.
 
- 
+````xml 
 <plugin>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>aspectj-maven-plugin</artifactId>
@@ -176,16 +186,25 @@ Then compile with the AspectJ plugin in your maven pom.
         </execution>
     </executions>
 </plugin>
+````
 
 Inspect the generated aspects to see what code modifications were made to your classes.
 
+````
  ./examples/target/generated-sources/annotations/ExampleAnnotatedResourceAdaptor$SleeAnnotationsAspect.aj
+````
 
+````
  ./examples/target/generated-sources/annotations/SimpleExampleAnnotatedSbb$SleeAnnotationsAspect.aj
+````
 
+````
  ./examples/target/generated-sources/annotations/CompleteExampleAnnotatedSbb$SleeAnnotationsAspect.aj
+````
 
+````
  ./examples/target/generated-sources/annotations/CompleteExampleAnnotatedProfile$SleeAnnotationsAspect.aj
+````
 
 -
 
